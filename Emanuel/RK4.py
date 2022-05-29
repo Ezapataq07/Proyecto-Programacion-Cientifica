@@ -19,12 +19,38 @@ las siguientes definiciones:
 #           y(1) = 2
 
 
+
 import numpy as np
+import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+
+layout = go.Layout(
+    title="",    
+    plot_bgcolor="#FFFFFF",
+    hovermode="x",
+    hoverdistance=100, # Distance to show hover label of data point
+    spikedistance=1000, # Distance to show spike
+    xaxis=dict(
+        title="time",
+        linecolor="#BCCCDC",
+        showspikes=True, # Show spike line for X-axis
+        # Format spike
+        spikethickness=2,
+        spikedash="dot",
+        spikecolor="#999999",
+        spikemode="across",
+    ),
+    yaxis=dict(
+        title="",
+        linecolor="#BCCCDC"
+    )
+)
 
 def f(t, y):
     return 4*t**3*np.arctan(2*y)
 
 def RK4(f, y0, a, b, N):
+    N=N+1
     h=(b-a)/(N-1)
     y=np.zeros(N)
     k1=np.zeros(N)
@@ -43,11 +69,11 @@ def RK4(f, y0, a, b, N):
 
         y[i+1]=y[i]+(h/6)*(k1+2*k2+2*k3+k4)
     
-    print(t)
-    print(y)
-    return y
+    fig = go.Figure(data=[go.Scatter(x=t,y=y)],layout=layout)
+    fig.show()
+    return t, y
 
-RK4(f, 2, 1, 2, 4)
+RK4(f, 2, 1, 2, 1000)
 
 
 
