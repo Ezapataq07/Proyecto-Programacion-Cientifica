@@ -69,15 +69,18 @@ deltaT1 = TeJ - T4
 deltaT2 = T2 - TeA
 
 deltaTML = (deltaT1-deltaT2)/(math.log(deltaT1/deltaT2))
-
+AHtb = (AHtbJ + AHtbA)/2
+NPrj = (Cpj*muJ)/(kTJ)
+hJ = (kTJ/Dinttb)*(0.0243*(NReJ)**(0.8)*NPrj*0.333)
+U = 1/(AH*((1/(hJ*AHtbJ))+(wtb/(KTtb*AHtb))+(1/(hA*AHtbA))))
 dQIdeC = U*AH*deltaTML
 ##dQtbA_A = hA*AHtbA*(TtbA-TA); 
 dQtbA_A = dQIdeC;
-NPrj = (Cpj*muJ)/(kTJ)
-hJ = (kTJ/Dinttb)*(0.0243*(NReJ)**(0.8)*NPrj*0.333)
-AHtb = (AHtbJ + AHtbA)/2
 
-U = 1/(AH*((1/(hJ*AHtbJ))+(wtb/(KTtb*AHtb))+(1/(hA*AHtbA))))
+
+
+
+
 ##dQJ_tbJ = hJ*AHtbJ*(TJ-TtbJ);
 dQJ_tbJ = dQIdeC
 dQtbJ_tbA = dQJ_tbJ - dQtbA_A
