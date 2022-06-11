@@ -137,3 +137,4 @@ h = sns.jointplot(data=outputs, x="Occurrence Day", y="Max Infection",
                   height=6)
 """De la figura de arriba, se puede ver cómo las salidas están variando según los parámetros de entrada inciertos. Sin embargo en la animación a
 continuación se puede observar con mayor claridad cómo varían las variables de salida en términos de las diferentes combinaciones de gamma y beta"""
+plt.show()
