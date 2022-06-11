@@ -1,4 +1,4 @@
-"""(
+"""
 El siguiente programa implementa el método numérico Runge Kutta 4 para solucionar ecuaciones difereciales del tipo
 PVI:
         y'(t) = f(t, y(t))     para        a<=t<=b
@@ -14,7 +14,7 @@ las siguientes definiciones:
     k_3 = f(t_i + h/2, y_i + (h/2)k_2)
     k_4 = f(t_i+1, y_i + hk_3)
 """
-#Para ejemplo inicial y comprobación de la implementación se trabaja el siguiente problema:
+# Para ejemplo inicial y comprobación de la implementación se trabaja el siguiente problema:
 #           y'(t) = 4(t^3)(arctan(2y(t))),   1<=t<=2
 #           y(1) = 2
 
