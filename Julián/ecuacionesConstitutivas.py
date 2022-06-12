@@ -23,12 +23,12 @@ Cpj = 4.187*(1 - 0.006*gB) #Capacidad calorifica especifica del jugo.
 
 ##T = 273.15 #Grados Kelvin.
 
-Cpa =  lambda T4: 7.2951406*(10*(-8))(T4*3) - 7.431358269(10*(-5))(T4**2) + 0.02620653*T4 + 1.0156045
+Cpa =  lambda T4: 7.2951406*(10**(-8))*(T4*3) - 7.431358269*(10**(-5))*(T4**2) + 0.02620653*T4 + 1.0156045
 #Capacidad calorifica del agua.
 
 pj =  lambda T2: 1179.7 - 0.354*T2  #Densidad del jugo.
 
-pA = lambda T4: -0.004323394923*((T4-273.15)*2) - 0.04038343824(T4-273.15) + 1000.807908 #Densidad del agua.
+pA = lambda T4: -0.004323394923*((T4-273.15)*2) - 0.04038343824*(T4-273.15) + 1000.807908 #Densidad del agua.
 
 Ntb = 10 #Número de tubos.
 Ltb = 10 #Longitud de los tubos.
