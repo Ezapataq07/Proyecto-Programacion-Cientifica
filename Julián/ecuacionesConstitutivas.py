@@ -77,10 +77,6 @@ dQIdeC = U*AH*deltaTML
 ##dQtbA_A = hA*AHtbA*(TtbA-TA); 
 dQtbA_A = dQIdeC;
 
-
-
-
-
 ##dQJ_tbJ = hJ*AHtbJ*(TJ-TtbJ);
 dQJ_tbJ = dQIdeC
 dQtbJ_tbA = dQJ_tbJ - dQtbA_A
