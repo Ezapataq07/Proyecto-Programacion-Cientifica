@@ -73,8 +73,36 @@ def RK4(f, y0, a, b, N):
     fig.show()
     return t, y
 
-RK4(f, 2, 1, 2, 1000)
+#RK4(f, 2, 1, 2, 1000)
+
+""" Implementación de RK4 Vectorial 
+"""
 
 
 
+def RK4_Vec(F, W0, a, b, N):
+    N=N+1
+    h=(b-a)/(N-1)
+    W = np.zeros(N, dtype=np.ndarray)
+    W[0]=W0
+    t = np.linspace(a,b,N)
+    
+    for i in range(N-1):
+        k1=F(t[i],W[i])
+        k2=F(t[i]+h/2,W[i]+k1*h/2)
+        k3=F(t[i]+h/2,W[i]+k2*h/2)
+        k4=F(t[i+1],W[i]+h*k3)
 
+        W[i+1]=W[i]+(h/6)*(k1+2*k2+2*k3+k4)
+    return W
+
+def F(t, W):
+    f0 = W[1]
+    f1 = W[2]
+    f2 = np.log(t**2+4)-np.sin(W[1])-np.exp(t)*W[0]
+    return np.array([f0,f1,f2])
+
+W0 = np.array([1,0,8])
+
+Sol = RK4_Vec(F, W0, 3, 3.4, 1)
+print(Sol)
