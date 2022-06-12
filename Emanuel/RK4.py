@@ -94,7 +94,7 @@ def RK4_Vec(F, W0, a, b, N):
         k4=F(t[i+1],W[i]+h*k3)
 
         W[i+1]=W[i]+(h/6)*(k1+2*k2+2*k3+k4)
-    return W
+    return t, W
 
 def F(t, W):
     f0 = W[1]
@@ -104,5 +104,15 @@ def F(t, W):
 
 W0 = np.array([1,0,8])
 
-Sol = RK4_Vec(F, W0, 3, 3.4, 1)
-print(Sol)
+
+
+def Plot_Component(component, t, W):
+    y = np.zeros(len(W))
+    for i in range(len(W)):
+        y[i] = W[i][component]
+    fig = go.Figure(data=[go.Scatter(x=t,y=y)],layout=layout)
+    fig.show()
+
+t, Sol = RK4_Vec(F, W0, 3, 5, 100)
+Plot_Component(0,t,Sol)
+

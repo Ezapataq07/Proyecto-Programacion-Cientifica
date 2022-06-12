@@ -2,6 +2,7 @@ from ast import Lambda
 from asyncio.tasks import _T4
 import numpy as np
 import math
+from Emanuel.RK4 import *
 fm1 = 10 #Flujo masico
 fm3 = 10 # Flujo masico
 epsilon = 10
@@ -97,3 +98,21 @@ fD = lambda T2:(-2*math.log10((epsilon/Dinttb)-(5.02/NReJ(T2))*(math.log10((epsi
 hf1_2= lambda T2,T4: fD(T2)*((Ltb*(velJ(T2))**2)/(Dinttb*2));
 hfcz= lambda T2: fD(T2)*(Dintcz*(NBf+1))/(Deqcz);
 vAcz =lambda T4: ((fm1/pA(T4))/AFcz)
+
+
+T1 = 273.0
+T3 = 273.0
+CPtb = 10.0
+CPcz = 10.0
+
+def F(t, W):
+    f0 = (1/(Cpj*Mj(W[0])))*(fm1*Hj(T1)-fm1*Hj(W[0])-dQJ_tbJ(W[0],W[2]))
+    f1 = (1/(CPtb*Mtb))*(dQtbJ_tbA(W[0],W[2]))
+    f2 = (1/(Cpa(W[2])*MA(W[0])))*(fm3*HA(T3)-fm3*HA(W[2])+dQtbA_A(W[0],W[2])-dQA_czA)
+    f3 = (1/(CPcz*Mcz))*dQczA_czat
+    return np.array([f0,f1,f2,f3])
+
+W0 = np.array([273,273,273,273])
+
+Sol = RK4_Vec(F, W0, 0, 400, 1000)
+print(Sol)
