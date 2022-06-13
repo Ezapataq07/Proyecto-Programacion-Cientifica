@@ -1,6 +1,5 @@
 
 import numpy as np
-import math
 from RK4 import *
 fm1 = 1250 #Flujo masico
 fm3 = 3500 # Flujo masico
