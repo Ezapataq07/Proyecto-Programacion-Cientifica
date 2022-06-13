@@ -4,16 +4,16 @@ import math
 from RK4 import *
 fm1 = 1250 #Flujo masico
 fm3 = 3500 # Flujo masico
-epsilon = 0.033               ####
+epsilon = 0               ####
 gB = 20 #Grados Brix
 NBf = 500                    ######
-Dintcz = 0.635
+Dintcz = 0.023
 SepBf = 0.241
-kTJ = 0.71                ####
+kTJ = .73               ####
 KTtb = 16.3 #Conductividad termica #####
 Dexttb = 0.019
-TeA = 293
-TeJ = 323
+TeA = 293.15
+TeJ = 323.15
 ##T2=10
 #T4=10
 
@@ -31,14 +31,14 @@ pj =  lambda T2: 1179.7 - 0.354*T2  #Densidad del jugo.
 pA = lambda T4: -0.004323394923*((T4-273.15)**2) - 0.04038343824*(T4-273.15) + 1000.807908 #Densidad del agua.
 
 Ntb = 532 #Número de tubos.
-Ltb = 3.5 #Longitud de los tubos.
+Ltb = 4 #Longitud de los tubos.
 Dinttb = 0.016 #Diametro interno de los tubos.
 Pitb = 0.02381 #Separacion entre centros de tubos contiguos
 wtb = Dexttb - Dinttb #Espesor del tubos
 
 Vj = Ntb*Ltb*((np.pi*(Dinttb**2))/4) #Volumen del jugo.
 
-Lcz = 5 #Longitud de la coraza.
+Lcz = 3 #Longitud de la coraza.
 
 
 VA = Ntb*Lcz*((np.pi*(Dintcz**2))/4) - Ntb*Ltb*((np.pi*(Dexttb**2))/4) #volumen del agua
@@ -48,7 +48,7 @@ Mj = lambda T2: pj(T2)*Vj #Masa del jugo.
 MA = lambda T4 : pA(T4)*VA #Masa del agua.
 
 Mtb = 1.120*Ltb #Masa del tubo.
-Mcz = 2*Lcz #Masa de la coraza.
+Mcz = 2 #Masa de la coraza.
 kTA = 0.58
 
 Hj = lambda T2:5.46829932e-4*((T2-273.15)**2) + 3.694618471*(T2-273.15)-0.633984 #Entalpia del jugo.
@@ -133,13 +133,15 @@ CPcz = 26
 def F(t, W):
     f0 = (1/(Cpj*Mj(W[0])))*(fm1*Hj(T1)-fm1*Hj(W[0])-dQJ_tbJ(W[0],W[2]))
     f1 = (1/(CPtb*Mtb))*(dQtbJ_tbA)
-    f2 = (1/(Cpa(W[2])*MA(W[0])))*(fm3*HA(T3)-fm3*HA(W[2])+dQtbA_A(W[0],W[2])-dQA_czA)
+    f2 = (1/(Cpa(W[2])*MA(W[2])))*(fm3*HA(T3)-fm3*HA(W[2])+dQtbA_A(W[0],W[2])-dQA_czA)
     f3 = (1/(CPcz*Mcz))*dQczA_czat
     return np.array([f0,f1,f2,f3])
 
-W0 = np.array([323.05,100,293.2,100])
+W0 = np.array([323.10,100,293.25,100])
 
 t, Sol = RK4_Vec(F, W0, 0, 400, 20000)
+
+Sol = (Sol - 273.15) 
 
 Plot_Component(0, t, Sol)
 Plot_Component(2, t, Sol)
