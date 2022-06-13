@@ -1,45 +1,45 @@
 
 import numpy as np
 import math
-fm1 = 10 #Flujo masico
-fm3 = 10 # Flujo masico
-epsilon = 10
-gB = 10 #Grados Brix
-NBf=10
-Dintcz = 10
-SepBf = 10
-kTJ = 10
-KTtb = 10 #Conductividad termica
-Dexttb = 10
-TeA = 10
-TeJ = 10
+from RK4 import *
+fm1 = 1250 #Flujo masico
+fm3 = 3500 # Flujo masico
+epsilon = 0.033               ####
+gB = 20 #Grados Brix
+NBf = 500                    ######
+Dintcz = 0.635
+SepBf = 0.241
+kTJ = 0.71                ####
+KTtb = 16.3 #Conductividad termica #####
+Dexttb = 0.019
+TeA = 293
+TeJ = 323
 ##T2=10
 #T4=10
 
-wtb = 10 #Espesor del tubos
+
 
 Cpj = 4.187*(1 - 0.006*gB) #Capacidad calorifica especifica del jugo.
 
 ##T = 273.15 #Grados Kelvin.
 
-Cpa =  lambda T4: 7.2951406*(10**(-8))*(T4**3) - 7.431358269*(10**(-5))*(T4**2) + 0.02620653*T4 + 1.0156045
+Cpa =  lambda T4: 7.2951406e-8*(T4**3) - 7.431358269e-5*(T4**2) + 0.02620653*T4 + 1.0156045
 #Capacidad calorifica del agua.
 
 pj =  lambda T2: 1179.7 - 0.354*T2  #Densidad del jugo.
 
 pA = lambda T4: -0.004323394923*((T4-273.15)**2) - 0.04038343824*(T4-273.15) + 1000.807908 #Densidad del agua.
 
-Ntb = 10 #Número de tubos.
-Ltb = 10 #Longitud de los tubos.
-Dinttb = 10 #Diametro interno de los tubos.
-Pitb = 10 #Separacion entre centros de tubos contiguos
-
+Ntb = 532 #Número de tubos.
+Ltb = 3.5 #Longitud de los tubos.
+Dinttb = 0.016 #Diametro interno de los tubos.
+Pitb = 0.02381 #Separacion entre centros de tubos contiguos
+wtb = Dexttb - Dinttb #Espesor del tubos
 
 Vj = Ntb*Ltb*((np.pi*(Dinttb**2))/4) #Volumen del jugo.
 
-Lcz = 10 #Longitud de la coraza.
-Dintcz = 10 #Diametro interno de la coraza.
-Dexttb = 10 #Diametro externo de los tubos.
+Lcz = 5 #Longitud de la coraza.
+
 
 VA = Ntb*Lcz*((np.pi*(Dintcz**2))/4) - Ntb*Ltb*((np.pi*(Dexttb**2))/4) #volumen del agua
 
@@ -47,13 +47,13 @@ Mj = lambda T2: pj(T2)*Vj #Masa del jugo.
 
 MA = lambda T4 : pA(T4)*VA #Masa del agua.
 
-Mtb = 10 #Masa del tubo.
-Mcz = 10 #Masa de la coraza.
-kTA = 10
+Mtb = 1.120*Ltb #Masa del tubo.
+Mcz = 2*Lcz #Masa de la coraza.
+kTA = 0.58
 
-Hj = lambda T2:5.46829932*(10**(-4))*((T2-273.15)**2) + 3.694618471*(T2-273.15)-0.633984 #Entalpia del jugo.
+Hj = lambda T2:5.46829932e-4*((T2-273.15)**2) + 3.694618471*(T2-273.15)-0.633984 #Entalpia del jugo.
 
-Deqcz = 4*((((Pitb**2)*math.sqrt(3))/4) - (np.pi*(Dexttb**2)/8))/((np.pi*Dexttb)/2)
+Deqcz = 4*((((Pitb**2)*np.sqrt(3))/4) - (np.pi*(Dexttb**2)/8))/((np.pi*Dexttb)/2)
 
 muA  = lambda T4: (0.0002471250997*(T4-273.15)**2) - 0.03226252622*(T4-273.15) + 1.545370351 #viscosidad del agua
 
@@ -72,35 +72,35 @@ NReJ = lambda T2: (pj(T2)*velJ(T2)*Dinttb)/muJ(T2)
 
 NPrA = lambda T4: (Cpa(T4)*muA(T4))/(kTA)
 
-hA = lambda T4:(kTA/Deqcz)*(0.36*(NReA(T4)**(0.55))*(NPrA(T4))**(0.333))
+hA = lambda T4:(kTA/Deqcz)*(0.36*(NReA(T4)**(0.55))*(NPrA(T4))**(1./3))
 
-HA =  lambda T4: 4.180358722*(T4-273.15) + 0.3506658477 #Entalpia del agua.
+HA =  lambda T4: 4.180358722*(T4-273.15) + 0.3506658477  if ((T4-273.15) <= 50) else (8.64*8.314/18)*647.15*((T4/647.15-0.4221)/(1-647.15))**0.053 #Entalpia del agua.
 
 AHtbJ = np.pi*Dinttb*Ltb
 
 AHtbA = np.pi*Dexttb*Ltb
 
-AH = (1/2)*(AHtbJ+ AHtbA)
+AH = (1./2)*(AHtbJ+ AHtbA)
 
 deltaT1 = lambda T4: TeJ - T4 #diferencia temperatura entrada
 
 deltaT2 = lambda T2: T2 - TeA #diferencia temperatura salida
 
-deltaTML =  lambda T2,T4:(deltaT1(T4)-deltaT2(T2))/(math.log(deltaT1(T4)/deltaT2(T2)))
+deltaTML =  lambda T2,T4:(deltaT1(T4)-deltaT2(T2))/(np.log(deltaT1(T4)/deltaT2(T2)))
 
 AHtb = (AHtbJ + AHtbA)/2
 
 NPrj = lambda T2: (Cpj*muJ(T2))/(kTJ)
 
-hJ = lambda T2:(kTJ/Dinttb)*(0.0243*(NReJ(T2)**(0.8))*(NPrj(T2)**0.333))
+hJ = lambda T2:(kTJ/Dinttb)*(0.0243*(NReJ(T2)**(4./5))*(NPrj(T2)**(1./3)))
 
 U =lambda T2,T4: 1/(AH*((1/(hJ(T2)*AHtbJ))+(wtb/(KTtb*AHtb))+(1/(hA(T4)*AHtbA))))
 
 dQIdeC = lambda T2,T4:U(T2,T4)*AH*deltaTML(T2,T4)
-##dQtbA_A = hA*AHtbA*(TtbA-TA);
-dQtbA_A = lambda T2,T4: dQIdeC(T2,T4);
+##dQtbA_A = lambda T4, Ttb: hA(T4)*AHtbA*(Ttb-T4);
+dQtbA_A = lambda T2,T4: dQIdeC(T2,T4)
 
-##dQJ_tbJ = hJ*AHtbJ*(TJ-TtbJ);
+##dQJ_tbJ = lambda T2,Ttb: hJ(T2)*AHtbJ*(T2-Ttb);
 dQJ_tbJ =lambda T2,T4: dQIdeC(T2,T4)
 #dQtbJ_tbA = lambda T2,T4: dQJ_tbJ(T2,T4) - dQtbA_A(T2,T4)
 
@@ -116,10 +116,30 @@ Septb = Pitb - Dexttb
 
 AFcz = (Dintcz*Septb*SepBf)/Pitb
 
-fD = lambda T2:(-2*math.log10((epsilon/Dinttb)-(5.02/NReJ(T2))(math.log10((epsilon/(Dinttb*3.71)+(14.5/NReJ(T2)))))))*(-2) #que es epsilon?
+fD = lambda T2:(-2*np.log10((epsilon/Dinttb)/3.71-(5.02/NReJ(T2))*(np.log10((epsilon/(Dinttb*3.71)+(14.5/NReJ(T2)))))))**(-2) #que es epsilon?
 
 hf1_2= lambda T2,T4: fD(T2)*((Ltb*(velJ(T2)**2))/(Dinttb*2));
 
 hfcz= lambda T2: fD(T2)*(Dintcz*(NBf+1))/(Deqcz);
 
 vAcz =lambda T4: ((fm1/pA(T4))/AFcz)
+
+
+T1 = 323.15
+T3 = 293.15
+CPtb = 155
+CPcz = 26
+
+def F(t, W):
+    f0 = (1/(Cpj*Mj(W[0])))*(fm1*Hj(T1)-fm1*Hj(W[0])-dQJ_tbJ(W[0],W[2]))
+    f1 = (1/(CPtb*Mtb))*(dQtbJ_tbA)
+    f2 = (1/(Cpa(W[2])*MA(W[0])))*(fm3*HA(T3)-fm3*HA(W[2])+dQtbA_A(W[0],W[2])-dQA_czA)
+    f3 = (1/(CPcz*Mcz))*dQczA_czat
+    return np.array([f0,f1,f2,f3])
+
+W0 = np.array([323.05,100,293.2,100])
+
+t, Sol = RK4_Vec(F, W0, 0, 400, 20000)
+
+Plot_Component(0, t, Sol)
+Plot_Component(2, t, Sol)
