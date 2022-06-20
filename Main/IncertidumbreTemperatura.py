@@ -3,7 +3,7 @@ import numpy as np
 
 ##Para el sistema de ecuaciones diferenciales
 from scipy.integrate import odeint 
-
+np.random.seed(1)
 #Para generar las muestras 
 from pyDOE import lhs
 from scipy.stats.distributions import norm
@@ -18,9 +18,9 @@ from ecuacionesConstitutivas import *
 def IdeC_Model(t, W0):
     def F(A,t):
         T2, Ttb, T4, Tcz = A
-        return [(0.1/(Cpj*Mj(T2)))*(fm1*Hj(T1)-fm1*Hj(T2)-dQJ_tbJ(T2,T4)),
+        return [(1/(Cpj*Mj(T2)))*(fm1*Hj(T1)-fm1*Hj(T2)-dQJ_tbJ(T2,T4)),
                 (1/(CPtb*Mtb))*(dQtbJ_tbA),
-                (0.01/(Cpa(T4)*MA(T4)))*(fm3*HA(T3)-fm3*HA(T4)+dQtbA_A(T2,T4)-dQA_czA),
+                (1/(Cpa(T4)*MA(T4)))*(fm3*HA(T3)-fm3*HA(T4)+dQtbA_A(T2,T4)-dQA_czA),
                 (1/(CPcz*Mcz))*dQczA_czat]
 
     sol = odeint(F, W0, t)
