@@ -10,7 +10,7 @@ def F(t, W):
     f3 = (1/(CPcz*Mcz))*dQczA_czat
     return np.array([f0,f1,f2,f3])
 
-W0 = np.array([323.10,100,293.25,100])
+W0 = np.array([T1-0.05,100,T3+0.1,100])
 
 t, Sol = RK4_Vec(F, W0, 0, 400, 20000)
 
