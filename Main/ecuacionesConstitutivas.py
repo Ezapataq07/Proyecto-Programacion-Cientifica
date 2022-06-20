@@ -1,29 +1,51 @@
 
 import numpy as np
 from RK4 import *
+
 fm1 = 1250 #Flujo masico
+
 fm3 = 3500 # Flujo masico
-epsilon = 0              
+
+epsilon = 0   
+
 gB = 20 #Grados Brix
+
 NBf = 500 #Número de Bafles
+
 Dintcz = 0.023 #Diametro interno de la coraza
+
 SepBf = 0.241 #Separación entre Bafles
+
 kTJ = .73 #Conductividad termica del jugo
-KTtb = 16.3 #Conductividad termica de los tubos #####
+
+KTtb = 16.3 #Conductividad termica de los tubos 
+
 Dexttb = 0.019 #Diametro externo de los tubos
+
 TeA = 293.15 #Temperatura de entrada del agua
+
 TeJ = 323.15 #Temperatura de entrada del jugo
+
 Cpj = 4.187*(1 - 0.006*gB) #Capacidad calorifica especifica del jugo
+
 Cpa =  lambda T4: 7.2951406e-8*(T4**3) - 7.431358269e-5*(T4**2) + 0.02620653*T4 + 1.0156045
 #Capacidad calorifica del agua.
+
 pj =  lambda T2: 1179.7 - 0.354*T2  #Densidad del jugo.
+
 pA = lambda T4: -0.004323394923*((T4-273.15)**2) - 0.04038343824*(T4-273.15) + 1000.807908
  #Densidad del agua.
+
 Ntb = 532 #Número de tubos.
+
 Ltb = 4 #Longitud de los tubos.
+
 Dinttb = 0.016 #Diametro interno de los tubos.
+
 Pitb = 0.02381 #Separacion entre centros de tubos contiguos
+
 wtb = Dexttb - Dinttb #Espesor del tubos
+
 Vj = Ntb*Ltb*((np.pi*(Dinttb**2))/4) #Volumen del jugo.
 Lcz = 3 #Longitud de la coraza.
 
@@ -99,29 +121,36 @@ dQJ_tbJ =lambda T2,T4: dQIdeC(T2,T4)
 #Flujo de calor del jugo hacia el tubo que está en contacto con el jugo
 
 dQA_czA = 0
-#Flujo de calor del agua hacia la coraza que est
+#Flujo de calor del agua hacia la coraza que está en contacto con el agua
 
-dQczA_czat = 0 #Presuntamente todo esto es igual a 0.
+dQczA_czat = 0 
+#Flujo de calor de la coraza que está en contacto con el agua hacia la coraza que está en contacto con
+#el aislante termico.
 
 dQtbJ_tbA = 0
+#Flujo de calor del tubo que está en contacto con el jugo hacia el tubo que está en contacto con el agua
 
-NNu = lambda T2:(hJ(T2)*Dinttb)/(kTJ)
+NNu = lambda T2:(hJ(T2)*Dinttb)/(kTJ) #Número de Nusselt
 
-Septb = Pitb - Dexttb
+Septb = Pitb - Dexttb #Separación entre tubos
 
-AFcz = (Dintcz*Septb*SepBf)/Pitb
+AFcz = (Dintcz*Septb*SepBf)/Pitb #Area del flujo para el agua que va por la coraza
 
-fD = lambda T2:(-2*np.log10((epsilon/Dinttb)/3.71-(5.02/NReJ(T2))*(np.log10((epsilon/(Dinttb*3.71)+(14.5/NReJ(T2)))))))**(-2) #que es epsilon?
+fD = lambda T2:(-2*np.log10((epsilon/Dinttb)/3.71-(5.02/NReJ(T2))*(np.log10((epsilon/(Dinttb*3.71)+(14.5/NReJ(T2)))))))**(-2) 
+#Factor de fricción de Darcy
 
-hf1_2= lambda T2,T4: fD(T2)*((Ltb*(velJ(T2)**2))/(Dinttb*2));
+hf1_2= lambda T2,T4: fD(T2)*((Ltb*(velJ(T2)**2))/(Dinttb*2))
+#Ecuación de Darcy-Weisbach para calcular las perdidas por fricción de jugo.
 
-hfcz= lambda T2: fD(T2)*(Dintcz*(NBf+1))/(Deqcz);
+hfcz= lambda T2: fD(T2)*(Dintcz*(NBf+1))/(Deqcz) #Perdidas de fricción en la coraza
 
-vAcz =lambda T4: ((fm1/pA(T4))/AFcz)
+vAcz =lambda T4: ((fm1/pA(T4))/AFcz) #Velocidad del agua en la coraza
 
+T1 = 323.15 #Temperatura de entrada del jugo
 
-T1 = 323.15
-T3 = 293.15
-CPtb = 155
-CPcz = 26
+T3 = 293.15 #Temperatura de entrada del agua
+
+CPtb = 155 #Calor especifico del tubo
+
+CPcz = 26 #Calor especifico de la coraza
 
