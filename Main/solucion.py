@@ -5,9 +5,9 @@ from ecuacionesConstitutivas import *
 
 # La siguiente función es una función vectorial que contiene las ecuaciones diferenciales a resolver
 def F(t, W):
-    dT2 = (0.1/(Cpj*Mj(W[0])))*(fm1*Hj(T1)-fm1*Hj(W[0])-dQJ_tbJ(W[0],W[2]))
+    dT2 = (1/(Cpj*Mj(W[0])))*(fm1*Hj(T1)-fm1*Hj(W[0])-dQJ_tbJ(W[0],W[2]))
     dTtb = (1/(CPtb*Mtb))*(dQtbJ_tbA)
-    dT4 = (0.01/(Cpa(W[2])*MA(W[2])))*(fm3*HA(T3)-fm3*HA(W[2])+dQtbA_A(W[0],W[2])-dQA_czA)
+    dT4 = (1/(Cpa(W[2])*MA(W[2])))*(fm3*HA(T3)-fm3*HA(W[2])+dQtbA_A(W[0],W[2])-dQA_czA)
     dTcz = (1/(CPcz*Mcz))*dQczA_czat
     return np.array([dT2,dTtb,dT4,dTcz])
 

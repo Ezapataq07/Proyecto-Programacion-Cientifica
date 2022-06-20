@@ -42,9 +42,9 @@ Lcz = 3 #Longitud de la coraza.
 
 VA = Ntb*Lcz*((np.pi*(Dintcz**2))/4) - Ntb*Ltb*((np.pi*(Dexttb**2))/4) #volumen del agua
 
-Mj = lambda T2: pj(T2)*Vj #Masa del jugo.
+Mj = lambda T2: pj(T2)*Vj*(1/0.1) #Masa del jugo.
 
-MA = lambda T4 : pA(T4)*VA #Masa del agua.
+MA = lambda T4 : pA(T4)*VA*(1/0.01)  #Masa del agua.
 
 Mtb = 1.120*Ltb #Masa del tubo.
 Mcz = 2 #Masa de la coraza.
