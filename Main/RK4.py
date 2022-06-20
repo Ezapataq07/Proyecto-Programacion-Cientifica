@@ -24,6 +24,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
+# layout es solo un parámetro para mejorar el estilo del gráfico
 layout = go.Layout(
     title="",    
     plot_bgcolor="#FFFFFF",
@@ -46,9 +47,7 @@ layout = go.Layout(
     )
 )
 
-def f(t, y):
-    return 4*t**3*np.arctan(2*y)
-
+# Implementación del método escalar de Runge Kutta 4
 def RK4(f, y0, a, b, N):
     N=N+1
     h=(b-a)/(N-1)
@@ -73,14 +72,17 @@ def RK4(f, y0, a, b, N):
     fig.show()
     return t, y
 
-#RK4(f, 2, 1, 2, 1000)
+
 
 """ Implementación de RK4 Vectorial 
 """
 
-
-
 def RK4_Vec(F, W0, a, b, N):
+    # F es una función vectorial que contiene las derivadas de las variables a encontrar
+    # W0 son las condiciones iniciales
+    # a es el tiempo inicial
+    # b es el tiempo final
+    # N es el número de divisiones que se tomarán en el intervalo [a,b]
     N=N+1
     h=(b-a)/(N-1)
     W = np.zeros(N, dtype=np.ndarray)
@@ -92,27 +94,14 @@ def RK4_Vec(F, W0, a, b, N):
         k2=F(t[i]+h/2,W[i]+k1*h/2)
         k3=F(t[i]+h/2,W[i]+k2*h/2)
         k4=F(t[i+1],W[i]+h*k3)
-
+        # W son las soluciones para diferentes tiempos
         W[i+1]=W[i]+(h/6)*(k1+2*k2+2*k3+k4)
     return t, W
 
-def F(t, W):
-    f0 = W[1]
-    f1 = W[2]
-    f2 = np.log(t**2+4)-np.sin(W[1])-np.exp(t)*W[0]
-    return np.array([f0,f1,f2])
-
-W0 = np.array([1,0,8])
-
-
-
+# La siguiente función sirve para graficar la solución de alguna componente de la solución por el método Runge Kutta Vectorial
 def Plot_Component(component, t, W):
     y = np.zeros(len(W))
     for i in range(len(W)):
         y[i] = W[i][component]
     fig = go.Figure(data=[go.Scatter(x=t,y=y)],layout=layout)
     fig.show()
-
-##t, Sol = RK4_Vec(F, W0, 3, 5, 100)
-##Plot_Component(0,t,Sol)
-
