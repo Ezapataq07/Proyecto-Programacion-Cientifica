@@ -40,11 +40,11 @@ fm3_samples = np.random.normal(3500,250,sample_num)
 
 
   # Se pueden visualizar las muestras transformadas 
-df_samples = pd.DataFrame({r"$T_1$":fm1_samples,
-                          r"$T_3$": fm3_samples})
+df_samples = pd.DataFrame({r"$\dot{m_1}$":fm1_samples,
+                          r"$\dot{m_3}$": fm3_samples})
 
 plt.rcParams["axes.labelsize"] = 15
-sns.jointplot(data=df_samples, x=r"$T_1$", y=r"$T_3$", height=5);
+sns.jointplot(data=df_samples, x=r"$\dot{m_1}$", y=r"$\dot{m_3}$", height=5);
 
 
 #SIMULACIÓN MONTECARLO: Para este paso se crea un ciclo para predecir la evolución de S, I y R, para cada muestra de 𝛽 y 𝛾.

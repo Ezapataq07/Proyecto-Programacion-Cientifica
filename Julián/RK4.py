@@ -31,7 +31,7 @@ layout = go.Layout(
     hoverdistance=100, # Distance to show hover label of data point
     spikedistance=1000, # Distance to show spike
     xaxis=dict(
-        title="time",
+        title="Tiempo (s)",
         linecolor="#BCCCDC",
         showspikes=True, # Show spike line for X-axis
         # Format spike
@@ -41,7 +41,7 @@ layout = go.Layout(
         spikemode="across",
     ),
     yaxis=dict(
-        title="",
+        title="Temperatura (°C)",
         linecolor="#BCCCDC"
     )
 )
