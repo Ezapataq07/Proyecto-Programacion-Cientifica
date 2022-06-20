@@ -8,7 +8,6 @@ np.random.seed(1)
 from scipy.integrate import odeint 
 
 #Para generar las muestras 
-from pyDOE import lhs
 from scipy.stats.distributions import norm
 
 #Para la visualización
